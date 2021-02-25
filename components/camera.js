@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -27,6 +28,7 @@ import Spinner from 'react-native-spinkit';
 // import TesseractOcr, { LANG_ENGLISH,LANG_FRENCH } from 'react-native-tesseract-ocr';
 import Permissions from 'react-native-permissions';
 import config from '../config.json';
+// import vision from "react-cloud-vision-api";
 // import vision from "react-cloud-vision-api";
 
 
@@ -558,7 +560,7 @@ takePicture = async function() {
   if (this.camera) {
     const data = await this.camera.takePictureAsync({base64:true});
     // console.warn('takePicture ', data);
-    this.setState({path:data.uri,base64:data.base64,image:true,showbuttonCLose:true});
+    this.setState({path:data.uri,base64:data.base64,image:true,showbuttonCLose:true,filetype:'image'});
     // alert(this.state.path);
   }
 };
@@ -571,11 +573,13 @@ uploadImage = async () => {
   const {text}=this.state;
   const vrr= path.replace(/^.*(\\|\/|\:)/, '');
   const formData = new FormData();
+  const {filetype}=this.state;
   const ext=path.slice((path.lastIndexOf('.') - 1 >>> 0) + 2);
   const id=this.state.id;
   const Picker=this.state.PickerValueHolder.id;
   this.setState({uploading:true});
-  if (ext==='jpg'){
+  if (filetype==='image'){
+    alert(filetype);
     // vision.init({auth: 'f4abe8e2d2582d003b25bfcd6dd99a2d7636b82d'});
 
     // const req = new vision.Request({
@@ -649,6 +653,7 @@ uploadImage = async () => {
     console.log(err)
   }
   }else{
+    alert('file type  not image');
     // console.log('id_stag'+id);
     formData.append('id_stag',id);
     // formData.append('targL',Picker);
@@ -664,7 +669,7 @@ uploadImage = async () => {
     this.setState({uploading:true});
    
     try {
-      const urlvideo = "https://www.preprod.forma2plus.com/portail-stagiaire/upload_videoexp.php";
+      const urlvideo = "https://www.preprod.forma2plus.com/portail-stagiaire/upload_videoexpiOS.php";
       const response = await fetch(urlvideo, {
         method: 'POST',
         headers: {
@@ -686,12 +691,14 @@ uploadImage = async () => {
 
         alert('expression saved');
         console.log(responseJson);
+        alert(responseJson)
     
         // alert('Login ou mot de passe invalide');
       }
       // const json = await response.json()
     })
   } catch (err) {
+    alert(err);
       console.log(err)
     }
     // alert("file note existe"); 
@@ -978,13 +985,13 @@ stopVideo = async () => {
 };
 
 renderRecBtn() {
-  return <Icon name={'ios-videocam'} size={40} 
+  return <Icon name={'ios-videocam'} size={30} 
     color={'#C9A022'}  
       />;
 }
 
 renderStopRecBtn() {
-  return <Icon name={'ios-videocam'} size={40} 
+  return <Icon name={'ios-videocam'} size={30} 
   color={'red'}  
     />;
 }
@@ -1007,7 +1014,9 @@ renderCamera() {
       }}
       style={{
         flex: 1,
+        width:wp('100%'),
         justifyContent: 'space-between',
+        marginTop:hp('5%')
       }}
       type={this.state.type}
       flashMode={this.state.flash}
@@ -1063,7 +1072,7 @@ renderCamera() {
             
           <TouchableOpacity style={styles.retourne} onPress={this.toggleFlash.bind(this)}>
             
-          <Icon name={'md-flash'} size={40} color={'white'}
+          <Icon name={'md-flash'} size={30} color={'white'}
                    />
           </TouchableOpacity>
           <TouchableOpacity style={styles.retourne} onPress={this.toggleWB.bind(this)}>
@@ -1161,7 +1170,7 @@ renderCamera() {
             onPress={() =>{this.setState({cam:false}),this.props.navigation.navigate('Accueil')}}
           >
            {/* local-movies */}
-            <Icon name={'ios-home'} size={30} color={'#C9A022'}
+            <Icon name={'ios-home'} size={25} color={'#C9A022'}
                    />
             {/* <Text style={styles.flipText}> + </Text> */}
           </TouchableOpacity> 
@@ -1185,7 +1194,7 @@ renderCamera() {
             <Text style={styles.flipText}> AF : {this.state.autoFocus} </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.flipButton, styles.picButton, { flex: 0.25, alignSelf: 'flex-end' }]}
+            style={[styles.flipButton, styles.picButton, { flex: 0.20, alignSelf: 'flex-end' }]}
             onPress={this.takePicture.bind(this)}
           >
           <Icon name={'md-aperture'} size={30} 
@@ -1679,7 +1688,7 @@ const styles = StyleSheet.create({
           },
           flipText: {
             color: 'white',
-            fontSize: 15,
+            fontSize: 12,
           },
           zoomText: {
             position: 'absolute',
