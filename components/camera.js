@@ -570,7 +570,7 @@ setUploadProgress(Math.round((event.loaded * 100)/event.total));
 uploadImage = async () => {
   // const xhr = new XMLHttpRequest();
   const {mot,targTEXT,path}=this.state; 
-  const {text}=this.state;
+  const {googleVisionDetetion}=this.state;
   const vrr= path.replace(/^.*(\\|\/|\:)/, '');
   const formData = new FormData();
   const {filetype}=this.state;
@@ -579,7 +579,7 @@ uploadImage = async () => {
   const Picker=this.state.PickerValueHolder.id;
   this.setState({uploading:true});
   if (filetype==='image'){
-    alert(filetype);
+    //alert(filetype);
     // vision.init({auth: 'f4abe8e2d2582d003b25bfcd6dd99a2d7636b82d'});
 
     // const req = new vision.Request({
@@ -602,7 +602,7 @@ uploadImage = async () => {
   // formData.append('targL',Picker);
   formData.append('mot',mot.toString());
   formData.append('targTEXT',targTEXT);
-  formData.append('text',text);
+  formData.append('text',googleVisionDetetion);
   formData.append('id_groupe',this.state.id_groupe);
   formData.append('picture',{
     uri: path,
@@ -1273,7 +1273,7 @@ style={{
 
         </View>
         <TouchableOpacity style={{ width:wp('90%'), height:hp('5%'),borderRadius:30,alignItems:'center',marginTop:hp('1%'),justifyContent:'center'}}
-              onPress={() => this.setState({sendPic:false})}>
+              onPress={() => {this.uploadImage(),this.setState({sendPic:false})}}>
                         <Text style={{fontWeight: 'bold'}}>
                                               OK
                         </Text>
@@ -1318,24 +1318,44 @@ visible={this.state.sendvid}
 
 >
 
-  <View style={{backgroundColor:'#cce7e8',position: 'absolute',height:hp('50%'),width:wp('90%'),top:hp('15%'),marginLeft:wp('5%'),alignItems:'center',borderRadius:15}}>
+  <View style={{backgroundColor:'#F4F2F1',position: 'absolute',height:hp('50%'),width:wp('90%'),top:hp('15%'),marginLeft:wp('5%'),borderRadius:15}}>
     
-        <View style={{backgroundColor:'#2f3c7e',height:hp('6%'),width:wp('90%'),borderTopStartRadius:15,borderTopEndRadius:15}}>
-        <Text style={{fontSize:hp('3.2%'),fontWeight:'100',color:'white',textAlign:'center'}}>
-       Commentaire
-        </Text>
-        </View> 
+  <View
+                      style={{
+                        flexDirection:'row',
+                        marginTop:hp('3%'),
+                        marginBottom:hp('1%')
+                      }}>
+                              <View
+                                        style={{
+                                          flexDirection:'column'
+                                        }}>
+                                                  <Text
+                                                  style={{
+                                                    color:'#5C4DB1',
+                                                    fontSize:16
+                                                  }}>
+                                                    Your
+                                                  </Text>
+                                                  <View
+                                                  style={{
+                                                    borderWidth:1,
+                                                    borderColor:'#DC4F89'
+                                                  }}/>
+                                        </View>
+                              <Text
+                                style={{
+                                  color:'#5C4DB1',
+                                  fontWeight:'bold',
+                                  marginLeft:wp('1%'),
+                                  fontSize:16
+                                }}>
+                                Comments before it saved
+                              </Text>
+                      </View>
 
         <View  style={{fontSize:hp('3.2%'),fontWeight: 'bold',borderColor:'grey',top :10,height:hp('73%')}}>
 
-       
-          
-           
-            <View>
-              <Text style={{textAlign:'center',color:'grey'}}>
-              Your comment before it saved
-                </Text>
-            </View>
             <View >
             <TextInput
             ref={input => { this.textInput = input }}
@@ -1352,9 +1372,9 @@ visible={this.state.sendvid}
 
         </View>
             
-        <View  style={{flexDirection:'row',top:hp('40%'),position:'absolute'}}>
+        <View  style={{flexDirection:'row',top:hp('40%'),position:'absolute',alignSelf:'center'}}>
           
-        <TouchableOpacity style={{ width:wp('15%'), height:hp('4.5%'),backgroundColor:'grey',borderRadius:5,alignItems:'center'}}
+        <TouchableOpacity style={{ width:wp('15%'), height:hp('4.5%'),backgroundColor:'grey',borderRadius:5,alignItems:'center',justifyContent:'center'}}
           
           onPress={() => this.setState({sendvid:false})}>
             <Text style={{color:'white'}}>
@@ -1362,7 +1382,7 @@ visible={this.state.sendvid}
                 </Text>
              
         </TouchableOpacity> 
-        <TouchableOpacity style={{width:wp('15%'), height:hp('4.5%'),marginLeft:wp('25%'),backgroundColor:'blue',borderRadius:5,alignItems:'center',}}
+        <TouchableOpacity style={{width:wp('15%'), height:hp('4.5%'),marginLeft:wp('25%'),backgroundColor:'blue',borderRadius:5,alignItems:'center',justifyContent:'center'}}
           
           // onPress={() => {this.cnc (),this.props.navigation.navigate('enregistre',{id:this.state.id,PickerValueHolder:this.state.PickerValueHolder})}}
           onPress={() =>{this.uploadImage(),this.setState({sendvid:false,cam:false})}}
